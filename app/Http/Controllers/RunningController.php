@@ -3,10 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Running;
 
-use App\Models\Usuario;
-
-class SignUpController extends Controller
+class RunningController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,7 +14,7 @@ class SignUpController extends Controller
      */
     public function index()
     {
-     //
+        //
     }
 
     /**
@@ -25,7 +24,7 @@ class SignUpController extends Controller
      */
     public function create()
     {
-        return view ('registrar');
+        return view('running');
     }
 
     /**
@@ -36,19 +35,18 @@ class SignUpController extends Controller
      */
     public function store(Request $request)
     {
-        try {
-        $usuario = new Usuario();
-        $usuario->nome = $request->nome;
-        $usuario->email = $request->email;
-        $usuario->senha = password_hash($request->password, PASSWORD_ARGON2ID);
-        $usuario->save();
-        } catch (\Exception $e) {
-           dd($e);
-        }
+       
+            $running = new Running();
+            $running->nome_corrida = $request->nome_corrida;
+            $running->data = $request->data;
+            $running->hora_inicio = $request->hora_inicio;
+            $running->hora_fim = $request->hora_fim;
 
-        return redirect('/');
+            $running->save();
+         
+            return redirect('/');
     }
-    
+
     /**
      * Display the specified resource.
      *

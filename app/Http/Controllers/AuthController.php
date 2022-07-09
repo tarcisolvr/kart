@@ -21,13 +21,15 @@ class AuthController extends Controller
 
             if (password_verify($request->senha, $usuario->senha)) {
 
-                dd("Usuário logado");
+                session()->put('user', $usuario);
+                return redirect()->route('dashboard');
+                
             } else {
 
-                dd("Email ou senha incorretos");
+                return redirect()->route('login');
             }
         } else {
             echo "Nenhum usuário encontrado";
-        };
+        }
     }
 }

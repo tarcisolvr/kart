@@ -4,6 +4,10 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SignUpController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\LogoutController;
+use App\Http\Controllers\RunningController;
+use App\Http\Middleware\Auth;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -15,14 +19,17 @@ use App\Http\Controllers\DashboardController;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::get('/', [ DashboardController::class, 'index' ]);
 
-Route::get('/login', [ AuthController::class, 'index' ]);
-Route::post('/autenticar', [ AuthController::class, 'autenticar' ])->name('autenticar');
+Route::get('/login', [AuthController::class, 'index'])->name('login');
 
-Route::get('/registrar', [ SignUpController::class, 'create' ]);
-Route::post('/registrar/salvar', [ SignUpController::class, 'store' ])->name('signup.store');
+Route::post('/autenticar', [AuthController::class, 'autenticar'])->name('autenticar');
 
+Route::get('/registrar', [SignUpController::class, 'create']);
+Route::post('/registrar/salvar', [SignUpController::class, 'store'])->name('signup.store');
 
-
-
+Route::middleware([Auth::class])->group(function () {
+    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/logout', [LogoutController::class, 'logout'])->name('logout');
+    Route::get('/running', [RunningController::class, 'create'])->name('running');
+    Route::post('/running/criar', [RunningController::class, 'store'])->name('running.store');
+});
